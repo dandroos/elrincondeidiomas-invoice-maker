@@ -1,0 +1,18 @@
+{
+  "name": "elrincondeidiomas-invoice-creator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "google-spreadsheet": "^2.0.8",
+    "inquirer": "^7.0.0",
+    "pdfkit": "^0.10.0",
+    "shortid": "^2.2.15"
+  }
+}
