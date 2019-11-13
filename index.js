@@ -1,11 +1,10 @@
 const { prompt } = require("inquirer");
 const GoogleSpreadsheet = require("google-spreadsheet");
 const creds = require("./client_secret.json");
-const app = require("./app");
 const currentDate = new Date();
 const currentYear = currentDate.getFullYear();
+const invoiceGenerator = require("./invoiceGenerator");
 
-// Prompt for a date
 prompt([
   {
     type: "list",
@@ -23,7 +22,7 @@ prompt([
       "septiembre",
       "octubre",
       "noviembre",
-      "deciembre"
+      "diciembre"
     ]
   },
   {
@@ -36,17 +35,39 @@ prompt([
   console.log(answers);
   const period = `${answers.month}-${answers.year}`
 
-  // Access the Google Spreadsheet
   var doc = new GoogleSpreadsheet(
     "1gyuDDAeSocdMyIGxKoRZEkk-WlVkC68I_93xrJw80Ws"
   );
+  let sheet;
   doc.useServiceAccountAuth(creds, err => {
     if (err) console.error(err);
-    app(doc, period)
-    
+    doc.getInfo((err, info) => {
+      if (err) throw err;
+
+      sheet = info.worksheets.reduce((prevVal, currVal) => {
+        if (currVal.title === 'Student Directory') {
+          return currVal
+        }
+        else {
+          return prevVal
+        }
+      })
+      doc.getRows(sheet.id, (err, rows) => {
+        const data = []
+        rows.map((i) => {
+          const cuota = i.cuota.replace('€', '')
+          data.push({
+            name: `${i.nombre} ${i.apellido}`,
+            amount: cuota
+          })
+        })
+        console.log(data)
+        invoiceGenerator(data, period)
+      })
+    })
+
+
+
   });
 
-
-
-  // Map through the array and generate an invoice for each
 });

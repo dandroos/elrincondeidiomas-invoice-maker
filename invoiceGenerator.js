@@ -1,35 +1,30 @@
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
 const path = require("path");
+const numberGenerator = require('./invoiceNumberGenerator')
 
 module.exports = (data, period) => {
   const doc = new PDFDocument({ size: "A4", autoFirstPage: false });
   const filePath = `facturas - ${period}`;
   doc.pipe(fs.createWriteStream(filePath));
-  // const folderPath = path.join(__dirname, `facturas - ${period}`);
-
-  // fs.mkdirSync(folderPath);
 
   const printPeriod = period.replace("-", " ");
-  // Font variables
-  
+
   let int = 0;
   data.map((i, ind) => {
     const fontRegular = "Helvetica";
-  const fontBold = `${fontRegular}-Bold`;
+    const fontBold = `${fontRegular}-Bold`;
     doc.addPage();
     const amount = parseInt(i.amount);
     int++
-    
+
 
     doc.image(path.join(__dirname, "logo1.png"), 70, 50, {
       width: 180
     });
 
-    //     // Declare start font
     doc.font(fontRegular);
 
-    //     // Populate company name, address and contact details
     doc.text("El Rincón de Idiomas", { align: "right" });
     doc.text("Calle Alcaldes Mayores, 1", { align: "right" });
     doc.text("6 Majada Marcial", { align: "right" });
@@ -45,7 +40,6 @@ module.exports = (data, period) => {
     doc.moveDown();
     doc.fontSize(12);
 
-    // Generate and populate date
     const date = new Date();
     const spanishMonths = [
       "enero",
@@ -63,19 +57,17 @@ module.exports = (data, period) => {
     ];
     const str = `${date.getDate()} de ${
       spanishMonths[date.getMonth()]
-    } de ${date.getFullYear()}`;
+      } de ${date.getFullYear()}`;
 
     doc.text(str, { align: "right" });
 
     doc.moveDown(2);
 
-    // Populate client name and address
     doc.fontSize(12);
     doc.text(i.name);
 
     doc.moveDown(2);
 
-    // Populate heading
     doc
       .font(fontBold)
       .fontSize(14)
@@ -86,12 +78,11 @@ module.exports = (data, period) => {
 
     doc.moveDown(2);
     doc.font(fontRegular)
-    .fontSize(10)
-    .text(`Número de factura: ${date.getMonth() + 1}${date.getFullYear()}${int}`)
+      .fontSize(10)
+      .text(`Número de factura: ${numberGenerator(12)}`)
       .moveDown(2);
     doc.fontSize(12).font(fontBold);
 
-    // Invoice area
     doc
       .text("Descripción", { continued: true })
       .text("Precio", { align: "right" });
@@ -106,11 +97,10 @@ module.exports = (data, period) => {
       .text(`Clases de inglés por el mes de ${printPeriod}`, { continued: true })
       .text(`${amount.toFixed(2)}€`, { align: "right" });
 
-    doc.moveDown(4);
+    doc.moveDown(9);
 
     doc.fontSize(10);
-   
-    doc.moveDown(5);
+
     doc
       .font(fontRegular)
       .text(
@@ -135,16 +125,7 @@ module.exports = (data, period) => {
       .text("      ES41-2038-7314-6160-0027-7221")
       .fontSize(8)
       .text("        EN LA TRANSFERENCIA BANCARIA DEBERA APARECER EL NOMBRE DEL ALUMNO Y MES DE PAGO")
-    //   .moveDown();
-    // doc
-    //   .fontSize(10)
-    //   .text("Gracias por su pago y confianza en nuestra Academia.", {
-    //     align: "center"
-    //   });
-    // doc.moveDown(2);
-    .fontSize(12)
-
-
+      .fontSize(12)
   });
   doc.end();
 };
