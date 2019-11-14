@@ -1,0 +1,31 @@
+{
+  "spreadsheet_id": "1gyuDDAeSocdMyIGxKoRZEkk-WlVkC68I_93xrJw80Ws",
+  "school": "El Rincón de Idiomas",
+  "address1": "Calle Alcaldes Mayores, 1",
+  "address2": "6 Majada Marcial",
+  "city": "Puerto del Rosario",
+  "postcode": "35600",
+  "tel": "636 32 34 41",
+  "director": "Directora: Joanne Bowker",
+  "nie": "X2016168B",
+
+  "font": "Helvetica",
+  "fontBold": "Helvetica-Bold",
+  "months": [
+    "enero",
+    "febrero",
+    "marzo",
+    "abril",
+    "mayo",
+    "junio",
+    "julio",
+    "agosto",
+    "septiembre",
+    "octubre",
+    "noviembre",
+    "diciembre"
+  ],
+  "source_sheet": "Student Directory",
+  "currency": "€",
+  "logo_filename": "logo1.png"
+}
