@@ -1,7 +1,7 @@
 const { prompt } = require("inquirer");
 const GoogleSpreadsheet = require("google-spreadsheet");
 const creds = require("./client_secret.json");
-const invoiceGenerator = require("./invoiceGenerator");
+const invoiceGenerator = require("./scripts/invoiceGenerator");
 
 const currentYear = new Date().getFullYear();
 
@@ -32,8 +32,7 @@ prompt([
     default: currentYear
   }
 ]).then(answers => {
-  console.log(answers);
-  const period = `${answers.month}-${answers.year}`
+  const period = `${answers.month}-${answers.year}`;
 
   var doc = new GoogleSpreadsheet(
     "1gyuDDAeSocdMyIGxKoRZEkk-WlVkC68I_93xrJw80Ws"
@@ -45,28 +44,23 @@ prompt([
       if (err) throw err;
 
       sheet = info.worksheets.reduce((prevVal, currVal) => {
-        if (currVal.title === 'Student Directory') {
-          return currVal
+        if (currVal.title === "Student Directory") {
+          return currVal;
+        } else {
+          return prevVal;
         }
-        else {
-          return prevVal
-        }
-      })
+      });
       doc.getRows(sheet.id, (err, rows) => {
-        const data = []
-        rows.map((i) => {
-          const cuota = i.cuota.replace('€', '')
+        const data = [];
+        rows.map(i => {
+          const cuota = i.cuota.replace("€", "");
           data.push({
             name: `${i.nombre} ${i.apellido}`,
             amount: cuota
-          })
-        })
-        invoiceGenerator(data, period)
-      })
-    })
-
-
-
+          });
+        });
+        invoiceGenerator(data, period);
+      });
+    });
   });
-
 });

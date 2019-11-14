@@ -16,7 +16,7 @@ module.exports = (data, period) => {
     doc.addPage();
     const amount = parseInt(i.amount);
 
-    doc.image(path.join(__dirname, "logo1.png"), 70, 50, {
+    doc.image(path.join(__dirname, "../images/logo1.png"), 70, 50, {
       width: 180
     });
 
@@ -84,7 +84,7 @@ module.exports = (data, period) => {
     doc
       .text("Descripción", { continued: true })
       .text("Precio", { align: "right" });
-    doc.image(path.join(__dirname, "thinline.png"), {
+    doc.image(path.join(__dirname, "../images/thinline.png"), {
       width: doc.page.width - doc.page.margins.left * 2,
       height: 0.5,
       align: "center"
