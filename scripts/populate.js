@@ -1,3 +1,4 @@
+const moment = require("moment");
 const settings = require("../settings.json");
 const path = require("path");
 const numberGenerator = require("./invoiceNumberGenerator");
@@ -18,17 +19,14 @@ module.exports = {
   },
   populateDate(doc) {
     const date = new Date();
-
-    const str = `${date.getDate()} de ${
-      settings.months[date.getMonth()]
-    } de ${date.getFullYear()}`;
-
-    doc.text(str, { align: "right" });
+    moment.locale("es");
+    doc.text(moment(date).format("LL"), { align: "right" });
   },
-  populateBody(doc, student, printPeriod){
+  populateBody(doc, student, printPeriod) {
     const amount = parseInt(student.amount);
 
-    doc.text(student.name)
+    doc
+      .text(student.name)
       .moveDown(2)
       .font(settings.fontBold)
       .fontSize(14)
@@ -55,25 +53,25 @@ module.exports = {
       .text(`Clases de inglés por el mes de ${printPeriod}`, {
         continued: true
       })
-      .text(`${amount.toFixed(2)}€`, { align: "right" })
+      .text(`${amount.toFixed(2)}€`, { align: "right" });
   },
-  populateFooter(doc){
+  populateFooter(doc) {
     doc
-    .text("QUEDAMOS A LA ESPERA DE SUS PRONTAS NOTICIAS")
-    .moveDown()
-    .text("P.D: LOS PAGOS DEBERAN REALIZARSE DEL 1 AL 5 DE CADA MES")
-    .moveDown()
-    .text("SE PUEDEN REALIZAR MEDIANTE:")
-    .moveDown()
-    .text("  - EN EFECTIVO")
-    .moveDown()
-    .text("  - TARJETA BANCARIA")
-    .moveDown()
-    .text("  - TRANSFERENCIA BANCARIA EN LA CUENTA")
-    .text("      ES41-2038-7314-6160-0027-7221")
-    .fontSize(8)
-    .text(
-      "        EN LA TRANSFERENCIA BANCARIA DEBERA APARECER EL NOMBRE DEL ALUMNO Y MES DE PAGO"
-    );
+      .text("QUEDAMOS A LA ESPERA DE SUS PRONTAS NOTICIAS")
+      .moveDown()
+      .text("P.D: LOS PAGOS DEBERAN REALIZARSE DEL 1 AL 5 DE CADA MES")
+      .moveDown()
+      .text("SE PUEDEN REALIZAR MEDIANTE:")
+      .moveDown()
+      .text("  - EN EFECTIVO")
+      .moveDown()
+      .text("  - TARJETA BANCARIA")
+      .moveDown()
+      .text("  - TRANSFERENCIA BANCARIA EN LA CUENTA")
+      .text("      ES41-2038-7314-6160-0027-7221")
+      .fontSize(8)
+      .text(
+        "        EN LA TRANSFERENCIA BANCARIA DEBERA APARECER EL NOMBRE DEL ALUMNO Y MES DE PAGO"
+      );
   }
 };
