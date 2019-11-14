@@ -1,9 +1,9 @@
 const { prompt } = require("inquirer");
 const GoogleSpreadsheet = require("google-spreadsheet");
 const creds = require("./client_secret.json");
-const currentDate = new Date();
-const currentYear = currentDate.getFullYear();
 const invoiceGenerator = require("./invoiceGenerator");
+
+const currentYear = new Date().getFullYear();
 
 prompt([
   {
@@ -61,7 +61,6 @@ prompt([
             amount: cuota
           })
         })
-        console.log(data)
         invoiceGenerator(data, period)
       })
     })

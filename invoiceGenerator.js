@@ -1,7 +1,7 @@
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
 const path = require("path");
-const numberGenerator = require('./invoiceNumberGenerator')
+const numberGenerator = require("./invoiceNumberGenerator");
 
 module.exports = (data, period) => {
   const doc = new PDFDocument({ size: "A4", autoFirstPage: false });
@@ -10,14 +10,11 @@ module.exports = (data, period) => {
 
   const printPeriod = period.replace("-", " ");
 
-  let int = 0;
   data.map((i, ind) => {
     const fontRegular = "Helvetica";
     const fontBold = `${fontRegular}-Bold`;
     doc.addPage();
     const amount = parseInt(i.amount);
-    int++
-
 
     doc.image(path.join(__dirname, "logo1.png"), 70, 50, {
       width: 180
@@ -57,7 +54,7 @@ module.exports = (data, period) => {
     ];
     const str = `${date.getDate()} de ${
       spanishMonths[date.getMonth()]
-      } de ${date.getFullYear()}`;
+    } de ${date.getFullYear()}`;
 
     doc.text(str, { align: "right" });
 
@@ -77,7 +74,8 @@ module.exports = (data, period) => {
       });
 
     doc.moveDown(2);
-    doc.font(fontRegular)
+    doc
+      .font(fontRegular)
       .fontSize(10)
       .text(`Número de factura: ${numberGenerator(12)}`)
       .moveDown(2);
@@ -94,7 +92,9 @@ module.exports = (data, period) => {
     doc.moveDown();
     doc.font(fontRegular);
     doc
-      .text(`Clases de inglés por el mes de ${printPeriod}`, { continued: true })
+      .text(`Clases de inglés por el mes de ${printPeriod}`, {
+        continued: true
+      })
       .text(`${amount.toFixed(2)}€`, { align: "right" });
 
     doc.moveDown(9);
@@ -103,29 +103,23 @@ module.exports = (data, period) => {
 
     doc
       .font(fontRegular)
-      .text(
-        "QUEDAMOS A LA ESPERA DE SUS PRONTAS NOTICIAS",
-      )
+      .text("QUEDAMOS A LA ESPERA DE SUS PRONTAS NOTICIAS")
       .moveDown()
-      .text(
-        "P.D: LOS PAGOS DEBERAN REALIZARSE DEL 1 AL 5 DE CADA MES",
-      )
+      .text("P.D: LOS PAGOS DEBERAN REALIZARSE DEL 1 AL 5 DE CADA MES")
       .moveDown()
-      .text(
-        "SE PUEDEN REALIZAR MEDIANTE:",
-      )
+      .text("SE PUEDEN REALIZAR MEDIANTE:")
       .moveDown()
-      .text(
-        "  - EN EFECTIVO",
-      )
+      .text("  - EN EFECTIVO")
       .moveDown()
       .text("  - TARJETA BANCARIA")
       .moveDown()
       .text("  - TRANSFERENCIA BANCARIA EN LA CUENTA")
       .text("      ES41-2038-7314-6160-0027-7221")
       .fontSize(8)
-      .text("        EN LA TRANSFERENCIA BANCARIA DEBERA APARECER EL NOMBRE DEL ALUMNO Y MES DE PAGO")
-      .fontSize(12)
+      .text(
+        "        EN LA TRANSFERENCIA BANCARIA DEBERA APARECER EL NOMBRE DEL ALUMNO Y MES DE PAGO"
+      )
+      .fontSize(12);
   });
   doc.end();
 };
